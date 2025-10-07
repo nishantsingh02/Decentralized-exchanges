@@ -12,7 +12,7 @@ export const Appbar = () => {
         {session.data?.user ? (
           <PrimaryButton onClick={() => signOut()}>SignOut</PrimaryButton>
         ) : (
-          <PrimaryButton onClick={() => {}}>SignIn</PrimaryButton>
+          <PrimaryButton onClick={() => SignIn()}>SignIn</PrimaryButton>
         )}
       </div>
     </div>
