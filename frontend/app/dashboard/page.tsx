@@ -1,11 +1,42 @@
+"use client"
+import { useSession } from "next-auth/react";
+import { Router, useRouter } from "next/router";
 
 export default function dashboard() {
-    return <div className="text-center py-10 bg-white border-b border-gray-100">
-    <h1 className="text-4xl font-bold text-gray-800 tracking-tight">
-        DashBoard
-    </h1>
-    <p className="mt-2 text-base text-indigo-600 font-semibold">
-        Under Process: Stay Tuned
-    </p>
-</div>
+    const session = useSession();
+    
+
+    if(session.status === "loading") {
+        return <div>
+            Loading...
+        </div>
+    }
+
+    if(!session.data?.user) {
+        Router.push("/");
+        return null
+    }
+
+  return (
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="w-2/3 h-2/3 bg-white rounded-2xl border-gray-300 shadow-2xl flex justify-start items-start p-8">
+        <Greeting image={session.data?.user?.image ?? ""} name={session.data?.user?.name ?? ""} />
+      </div>
+    </div>
+  );
+}
+
+
+function Greeting({
+    image, name
+}: {
+    image: string,
+    name: string
+}) {
+    return <div className="flex items-center">
+        <img src={image} className="rounded-full w-16 h-16 p-1 border-2 border-gray-300" />
+        <div className="font-bold font-serif pl-3 text-3xl flex flex-col justify-center">
+           Welcome back, {name}!
+        </div>
+    </div>
 }
