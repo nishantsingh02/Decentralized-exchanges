@@ -18,6 +18,7 @@ model User {
   id          String @id @default(uuid())
   name        String?
   profilePicture  String?
+  sub             String  @default("")
   username    String @unique
   password    String?
   solWalletId String?
