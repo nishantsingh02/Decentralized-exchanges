@@ -7,6 +7,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const address = searchParams.get('address') as unknown as string;
 
+    // if there is no wallet address
     if(!address) {
         return NextResponse.json({
             error: "Address is requires"
@@ -19,14 +20,18 @@ export async function GET(req: NextRequest) {
     const supportedTokens = await getSupportedToken()
 
     // Fetch the balance for each token in parallel for speed
-    const balances = await Promise.all(supportedTokens.map(token => getAccountBalance(token, address)))
-    
+    const balances = await Promise.all(supportedTokens.map(token => getAccountBalance(token, address)));
+
+    const tokens = supportedTokens.map((token, index) => ({
+            ...token,
+            balance: balances[index],
+            usdBalance: balances[index] * token.price
+        }))
 
     return NextResponse.json({
-        token: supportedTokens.map((token, index) => ({
-            ...token,
-            balance: balances[index]
-        }))
+        tokens,
+        totalBalance : tokens.reduce((acc, val) => acc + val.usdBalance, 0) 
+        // .reduce() is an array method used to combine all values into a single result.
     })
 }
 

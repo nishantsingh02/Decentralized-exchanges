@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { LoadingSpinner } from "./LoadingSpinner";
+import { useTokens } from "../api/hooks/route";
 
 type AssetsProps = {
   publickey: string;
@@ -28,7 +29,7 @@ export const ProfileCard = ({ publickey }: { publickey: string }) => {
 
   if (status === "authenticated") {
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="flex justify-center items-center h-screen bg-blue-100">
         <div className="w-2/3 h-2/3 bg-white rounded-2xl border-gray-300 shadow-2xl flex flex-col justify-start items-start p-8 gap-y-8">
           <Greeting
             image={session.user?.image ?? ""}
@@ -44,6 +45,13 @@ export const ProfileCard = ({ publickey }: { publickey: string }) => {
 };
 
 function Assets({ publickey }: { publickey: string }) {
+
+  const {tokenBalance, loading} = useTokens(publickey);
+
+  if(loading) {
+    return "Loading...."
+  }
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center">
@@ -60,11 +68,13 @@ function Assets({ publickey }: { publickey: string }) {
         </button>
       </div>
 
-      <div className="mt-4">
-        <p className="font-mono bg-gray-100 p-2 rounded text-sm text-gray-700 break-all">
-          1.9 SOL 
-        </p>
-      </div>
+      <h1 className="font-bold text-[60px] text-grey-900 mobile:text-6xl css-0" data-cy="wallet-aggregate-balance">${tokenBalance?.totalBalance.toFixed(2)}<span className="ml-2 text-2xl text-gray-500 mobile:text-4xl css-0">USD</span></h1>
+      
+      {/* <div>
+        {JSON.stringify(tokenBalance?.tokens)}
+      </div> */}
+
+
     </div>
   );
 }

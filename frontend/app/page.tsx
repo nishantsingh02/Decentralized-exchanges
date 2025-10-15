@@ -3,7 +3,6 @@
 import { Hero } from "./components/Hero";
 
 export default function Home() {
-  const charcoal = '#08080A';    // Near-black base
 
   return (
     <div className="font-sans relative min-h-screen flex flex-col items-center text-white overflow-hidden" 
