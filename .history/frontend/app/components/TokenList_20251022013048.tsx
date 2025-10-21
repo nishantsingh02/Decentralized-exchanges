@@ -1,5 +1,4 @@
-// import { TokenWithBalance } from "../api/hooks/route"
-import { TokenWithBalance } from "@/lib/route"
+import { TokenWithBalance } from "../api/hooks/route"
 
 
 export function TokenList({tokens} : {
