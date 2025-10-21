@@ -3,8 +3,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LoadingSpinner } from "./LoadingSpinner";
-// import { useTokens } from "../api/hooks/route";
-import { useTokens } from "@/lib/route";
+import { useTokens } from "../api/hooks/route";
 import { TokenList } from "./TokenList";
 import { TabButton } from "./Button";
 
