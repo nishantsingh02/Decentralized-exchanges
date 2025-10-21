@@ -1,3 +1,4 @@
+"use client"
 import { TokensDetails } from "@/lib/constant";
 import { useEffect, useState } from "react";
 import axios from "axios";
