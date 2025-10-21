@@ -12,7 +12,7 @@ export interface TokensDetails {
     native: boolean;
     decimals: number;
     id: string;
-    image: string
+    image: string;
 }
 
 export const SUPPORTED_TOKEN: TokensDetails[] = [{
