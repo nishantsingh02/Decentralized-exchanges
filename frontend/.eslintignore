@@ -1,0 +1,2 @@
+# Ignore all auto-generated Prisma files
+lib/generated/
