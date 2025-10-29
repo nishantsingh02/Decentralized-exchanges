@@ -1,5 +1,5 @@
 "use client"
-import { TokensDetails } from "@/lib/constant";
+import { TokensDetails } from "@/lib/tokens";
 import { useEffect, useState } from "react";
 import axios from "axios";
 

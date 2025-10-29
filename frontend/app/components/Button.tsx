@@ -13,6 +13,18 @@ export const PrimaryButton = ({children, onClick}: ButtonProps) => {
     </button>
 }
 
+export const PrimaryButtonSwap = ({ children, onClick }: ButtonProps) => {
+  return (
+    <button
+      onClick={onClick}
+      className="bg-gradient-to-r from-black to-cyan-500 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
+    >
+      {children}
+    </button>
+  );
+};
+
+
 export const TabButton = ({active, children, onClick}: {
     active: boolean;
     children: React.ReactNode

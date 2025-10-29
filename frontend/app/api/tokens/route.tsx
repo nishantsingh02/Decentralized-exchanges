@@ -55,7 +55,7 @@ async function getAccountBalance(token: {
 
         const account = await getAccount(connection, ata);
 
-        return Number(account.amount) / (10 ** token.decimals)
+        return Number(account.amount) / (10 ** decimals)
     
     } catch (error) {
         // if account does not exist (balance is 0), return 0

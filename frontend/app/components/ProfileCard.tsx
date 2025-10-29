@@ -3,23 +3,25 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LoadingSpinner } from "./LoadingSpinner";
-// import { useTokens } from "../api/hooks/route";
-import { useTokens } from "@/lib/route";
+import { TokenWithBalance, useTokens } from "../api/hooks/route";
+// import { useTokens } from "@/lib/route";
 import { TokenList } from "./TokenList";
 import { TabButton } from "./Button";
+import { Swap } from "./Swap";
 
 type AssetsProps = {
   publickey: string;
 };
 
-type Tab = "Tokens" | "Send" | "Add Funds" | "Swap" | "Withdraw"
-const tabs: Tab[] = ["Tokens", "Swap", "Add Funds", "Withdraw", "Send"]
+type Tab = "tokens" | "send" | "add_funds" | "swap" | "withdraw"
+const tabs: {id: Tab; name: string}[] = [{id: "tokens",name: "Tokens"}, {id: "add_funds", name: "Add Funds"},{id: "send", name:"Send"}, {id: "withdraw", name: "Withdraw"},  {id: "swap", name: "Swap"}]
 
 export const ProfileCard = ({ publickey }: { publickey: string }) => {
   // ✅ Step 1: Call ALL your hooks unconditionally at the top.
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [selectedTab, setSelectedTab] = useState<Tab>("Tokens"); // one is token and onther is swap
+  const [selectedTab, setSelectedTab] = useState<Tab>("tokens"); // one is token and onther is swap
+  const { tokenBalances, loading } = useTokens(publickey);
 
   // This effect hook is also called on every render.
   useEffect(() => {
@@ -43,14 +45,18 @@ export const ProfileCard = ({ publickey }: { publickey: string }) => {
             name={session.user?.name ?? ""}
           />
           <div className="w-full flex flex-wrap justify-center gap-3">
-            {tabs.map(tab => <TabButton active={tab === selectedTab} onClick={() => {
-            setSelectedTab(tab)
-          }}>{tab}</TabButton>)}
+            {tabs.map(tab => <TabButton key={tab.id} active={tab.id === selectedTab} onClick={() => {
+            setSelectedTab(tab.id)
+          }}>{tab.name}</TabButton>)}
           </div>
           
           {/* // this make our component alive, so there is no reloading again and again */}
-          <div className={`${selectedTab === "Tokens" ? "visible w-full" : "hidden"}`}>
-            <Assets publickey={publickey} />
+          <div className={`${selectedTab === "tokens" ? "visible w-full" : "hidden"}`}>
+            <Assets tokenBalances={tokenBalances} loading={loading} publickey={publickey} />
+          </div>
+
+          <div className={`${selectedTab === "swap" ? "visible w-full" : "hidden"}`}>
+            <Swap tokenBalances={tokenBalances} publickey={publickey} />
           </div>
 
         </div>
@@ -61,8 +67,14 @@ export const ProfileCard = ({ publickey }: { publickey: string }) => {
   return null;
 };
 
-function Assets({ publickey }: { publickey: string }) {
-  const { tokenBalances, loading } = useTokens(publickey);
+function Assets({ publickey, tokenBalances, loading }: {
+   publickey: string;
+   tokenBalances: {
+    tokenBalance: number,
+    tokens: TokenWithBalance[]
+   } | any;
+   loading: boolean;
+ }) {
 
   if (loading) {
     return "Loading....";
